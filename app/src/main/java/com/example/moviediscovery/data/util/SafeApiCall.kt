@@ -39,7 +39,6 @@ inline fun <T> safeApiCall(
         is IOException -> {
             emit(Resource.Error("Couldn't reach server. Check your internet connection."))
         }
-
         else -> {
             emit(Resource.Error(e.message ?: "An unexpected error occurred"))
         }
