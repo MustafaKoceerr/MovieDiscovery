@@ -1,2 +1,2 @@
-package com.example.moviediscovery.presentation.home
+package com.example.moviediscovery.presentation.search
 
