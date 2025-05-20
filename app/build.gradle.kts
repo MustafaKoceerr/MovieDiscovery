@@ -1,3 +1,11 @@
+import java.util.Properties
+
+// build.gradle.kts (module-level)'in en üstüne ekle:
+val localProperties = File(rootDir, "local.properties")
+val apiKey = Properties().apply {
+    load(localProperties.inputStream())
+}.getProperty("API_KEY") ?: throw GradleException("API_KEY not found in local.properties")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +28,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // API key'i BuildConfig'e ekliyoruz
+        buildConfigField("String", "API_KEY", "${apiKey}")
     }
 
     buildTypes {
@@ -40,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
