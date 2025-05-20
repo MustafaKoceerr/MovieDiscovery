@@ -1,6 +1,5 @@
 package com.example.moviediscovery.data.api.model
 
-import android.icu.text.CaseMap.Title
 import com.example.moviediscovery.domain.model.Movie
 import com.google.gson.annotations.SerializedName
 
