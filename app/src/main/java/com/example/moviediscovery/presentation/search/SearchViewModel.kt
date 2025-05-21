@@ -45,7 +45,7 @@ class SearchViewModel @Inject constructor(
     private fun searchMoviesWithDebounce() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(700) // Debounce for better UX
+            delay(600) // Debounce for better UX
             searchMovies()
         }
     }
