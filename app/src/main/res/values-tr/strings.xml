@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Film Keşfi</string>
+
+    <!-- Common -->
+    <string name="error_retry">Tekrar Dene</string>
+    <string name="error_network">Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edin.</string>
+    <string name="error_unknown">Beklenmeyen bir hata oluştu</string>
+    <string name="loading">Yükleniyor…</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Film Keşfi</string>
+    <string name="category_now_playing">Gösterimdekiler</string>
+    <string name="category_popular">Popüler</string>
+    <string name="category_top_rated">En İyi Puanlı</string>
+    <string name="category_upcoming">Yakında</string>
+
+    <!-- Detail Screen -->
+    <string name="detail_release_date">Yayın Tarihi: %1$s</string>
+    <string name="detail_runtime">%1$d dk</string>
+    <string name="detail_overview">Özet</string>
+
+    <!-- Search Screen -->
+    <string name="search_movies">Film ara…</string>
+    <string name="search_initial_state">Film aramak için yukarıdaki kutuyu kullanın</string>
+    <string name="search_no_results">"%1$s" için film bulunamadı</string>
+    <string name="search_clear">Aramayı Temizle</string>
+    <string name="search_back">Geri</string>
+
+    <!-- Language Selection -->
+    <string name="language_selector">Dil</string>
+    <string name="language_english">İngilizce</string>
+    <string name="language_turkish">Türkçe</string>
+
+    <!-- Loading Screen -->
+    <string name="loading_discovering_movies">Filmler keşfediliyor…</string>
+</resources>
