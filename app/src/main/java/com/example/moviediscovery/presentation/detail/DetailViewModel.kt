@@ -21,10 +21,22 @@ class DetailViewModel @Inject constructor(
     private val _state = mutableStateOf(DetailState(isLoading = true))
     val state: State<DetailState> = _state
 
-    private val movieId: Int = checkNotNull(savedStateHandle["movieId"])
+    // Retrieve the movieId from navigation arguments if available
+    private var movieId: Int? = savedStateHandle.get<Int>("movieId")
 
     init {
-        loadMovieDetails()
+        // Only load details automatically if movieId is available from navigation
+        movieId?.let {
+            loadMovieDetails()
+        }
+    }
+
+    fun setMovieId(id:Int){
+        // Only reload if the ID has changed
+        if (movieId != id) {
+            movieId = id
+            loadMovieDetails()
+        }
     }
 
     fun processIntent(intent: DetailIntent) {
@@ -34,7 +46,10 @@ class DetailViewModel @Inject constructor(
     }
 
     private fun loadMovieDetails() {
-        getMovieDetailsUseCase(movieId).onEach { result ->
+        // Ensure we have a movieId before loading
+        val id = movieId ?: return
+
+        getMovieDetailsUseCase(id).onEach { result ->
             when (result) {
                 is Resource.Success -> {
                     _state.value = DetailState(
