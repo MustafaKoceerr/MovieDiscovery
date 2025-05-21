@@ -7,9 +7,4 @@ object Constants{
     const val BACKDROP_SIZE = "w780"
     const val ORIGINAL_SIZE = "original"
 
-    // Categories for home screen
-    const val CATEGORY_NOW_PLAYING = "Now Playing"
-    const val CATEGORY_POPULAR = "Popular"
-    const val CATEGORY_TOP_RATED = "Top Rated"
-    const val CATEGORY_UPCOMING = "Upcoming"
 }
