@@ -19,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.moviediscovery.R
 import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,7 +41,7 @@ fun SearchTopBar(
             TextField(
                 value = query,
                 onValueChange = onQueryChange,
-                placeholder = { Text(text = "Search movies...") },
+                placeholder = { Text(text = stringResource(R.string.search_movies)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                 keyboardActions = KeyboardActions(onSearch = { onSearch() }),
@@ -61,13 +63,13 @@ fun SearchTopBar(
                         IconButton(onClick = onClearClick) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
-                                contentDescription = "Clear Search"
+                                contentDescription =  stringResource(R.string.search_clear)
                             )
                         }
                     } else {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
+                            contentDescription = stringResource(R.string.search_movies)
                         )
                     }
                 }
@@ -77,7 +79,7 @@ fun SearchTopBar(
             IconButton(onClick = onBackClick) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = stringResource(R.string.search_back)
                 )
             }
         }

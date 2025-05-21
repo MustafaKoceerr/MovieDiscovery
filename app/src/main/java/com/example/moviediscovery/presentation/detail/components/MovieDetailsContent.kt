@@ -15,7 +15,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.moviediscovery.R
 import com.example.moviediscovery.domain.model.MovieDetails
 import com.example.moviediscovery.presentation.detail.sampleMovieDetailsList
 
@@ -34,7 +36,7 @@ fun MovieDetailsContent(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = stringResource(R.string.search_back)
                         )
                     }
                 },

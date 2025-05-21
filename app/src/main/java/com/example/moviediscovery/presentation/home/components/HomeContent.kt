@@ -15,8 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.moviediscovery.R
 import com.example.moviediscovery.presentation.home.HomeState
 import com.example.moviediscovery.presentation.home.sampleMovies
 import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
@@ -34,12 +36,12 @@ fun HomeContent(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Movie Discovery") },
+                title = { Text(text = stringResource(R.string.home_title)) },
                 actions = {
                     IconButton(onClick = onSearchClick) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
+                            contentDescription = stringResource(R.string.search_movies)
                         )
                     }
                 }
@@ -55,7 +57,7 @@ fun HomeContent(
             if (state.nowPlayingMovies.isNotEmpty()) {
                 item {
                     MovieSection(
-                        title = "Now Playing",
+                        title = stringResource(R.string.category_now_playing),
                         movies = state.nowPlayingMovies,
                         onMovieClick = onMovieClick
                     )
@@ -65,7 +67,7 @@ fun HomeContent(
             if (state.popularMovies.isNotEmpty()) {
                 item {
                     MovieSection(
-                        title = "Popular",
+                        title = stringResource(R.string.category_popular),
                         movies = state.popularMovies,
                         onMovieClick = onMovieClick
                     )
@@ -75,7 +77,7 @@ fun HomeContent(
             if (state.topRatedMovies.isNotEmpty()) {
                 item {
                     MovieSection(
-                        title = "Top Rated",
+                        title = stringResource(R.string.category_top_rated),
                         movies = state.topRatedMovies,
                         onMovieClick = onMovieClick
                     )
@@ -85,7 +87,7 @@ fun HomeContent(
             if (state.upcomingMovies.isNotEmpty()) {
                 item {
                     MovieSection(
-                        title = "Upcoming",
+                        title = stringResource(R.string.category_upcoming),
                         movies = state.upcomingMovies,
                         onMovieClick = onMovieClick
                     )
