@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.moviediscovery.domain.model.Movie
+import com.example.moviediscovery.presentation.common.MovieItem
 import com.example.moviediscovery.presentation.home.sampleMovies
 import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
 
