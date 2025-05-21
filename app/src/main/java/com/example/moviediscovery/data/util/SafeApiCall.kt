@@ -1,7 +1,6 @@
 package com.example.moviediscovery.data.util
 
 import com.example.moviediscovery.domain.model.Resource
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -13,14 +12,7 @@ import java.io.IOException
 inline fun <T> safeApiCall(
     crossinline apiCall: suspend () -> Response<T>,
     crossinline errorMapper: (errorBody: String?, errorCode: Int) -> String = { errorBody, errorCode ->
-        errorBody?.let {
-            try {
-                val errorResponse = Gson().fromJson(it, ErrorResponseDto::class.java)
-                errorResponse.message ?: "Unknown error occurred (Code: $errorCode)"
-            } catch (e: Exception) {
-                "Error parsing response (Code: $errorCode)"
-            }
-        } ?: "Unknown error occurred (Code: $errorCode)"
+        createNetworkErrorMessage(errorBody = errorBody, errorCode = errorCode)
     }
 ): Flow<Resource<T>> = flow {
     emit(Resource.Loading)
@@ -45,8 +37,3 @@ inline fun <T> safeApiCall(
     }
 }.flowOn(Dispatchers.IO)
 
-data class ErrorResponseDto(
-    val message: String? = null,
-    val status: String? = null,
-    val timestamp: String? = null
-)
