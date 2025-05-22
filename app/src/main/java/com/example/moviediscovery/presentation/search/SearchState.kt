@@ -1,8 +1,6 @@
 package com.example.moviediscovery.presentation.search
 
-import com.example.moviediscovery.domain.model.Movie
 import com.example.moviediscovery.presentation.common.pagination.MoviePaginationState
-import com.example.moviediscovery.presentation.common.pagination.PaginationState
 
 data class SearchState(
     val query: String = "",
