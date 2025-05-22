@@ -18,7 +18,6 @@ import com.example.moviediscovery.presentation.search.components.InitialSearchSt
 import com.example.moviediscovery.presentation.search.components.SearchResults
 import com.example.moviediscovery.presentation.search.components.SearchTopBar
 
-
 @Composable
 fun SearchScreen(
     onMovieClick: (Int) -> Unit,
@@ -55,27 +54,42 @@ fun SearchScreen(
                 .padding(paddingValues)
         ) {
             when {
-                state.isLoading -> LoadingView()
+                // Show loading only for initial search (not for pagination)
+                state.isLoading && state.movies.isEmpty() -> {
+                    LoadingView()
+                }
 
+                // Show error only if no movies are loaded and there's an error
                 state.error.isNotEmpty() && state.movies.isEmpty() -> {
                     ErrorView(
                         message = state.error
                     ) {
-                        viewModel.processIntent(SearchIntent.SearchMovies)
+                        viewModel.processIntent(SearchIntent.Retry)
                     }
                 }
 
-                state.movies.isEmpty() && state.query.isNotEmpty() -> {
+                // Show empty results when query exists but no movies found
+                state.movies.isEmpty() && state.query.isNotEmpty() && !state.isLoading -> {
                     EmptySearchResults(query = state.query)
                 }
 
+                // Show search results with pagination
                 state.movies.isNotEmpty() -> {
                     SearchResults(
                         movies = state.movies,
                         onMovieClick = { movieId ->
                             onMovieClick(movieId)
                             viewModel.processIntent(SearchIntent.MovieClicked(movieId))
-                        }
+                        },
+                        onLoadMore = {
+                            viewModel.processIntent(SearchIntent.LoadNextPage)
+                        },
+                        onRetry = {
+                            viewModel.processIntent(SearchIntent.Retry)
+                        },
+                        isLoadingMore = state.isLoadingMore,
+                        error = if (state.movies.isNotEmpty()) state.error else "",
+                        endReached = state.endReached
                     )
                 }
 
@@ -86,7 +100,4 @@ fun SearchScreen(
             }
         }
     }
-
 }
-
-
