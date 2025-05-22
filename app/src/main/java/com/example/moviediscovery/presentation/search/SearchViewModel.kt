@@ -30,7 +30,7 @@ class SearchViewModel @Inject constructor(
         observeLanguageChanges {
             // Re-search with current query when language changes
             if (_state.value.query.isNotEmpty()) {
-                searchMovies()
+                refreshSearch()
             }
         }
     }
@@ -44,7 +44,18 @@ class SearchViewModel @Inject constructor(
 
             is SearchIntent.SearchMovies -> {
                 searchMovies()
+            }
 
+            is SearchIntent.LoadNextPage -> {
+                loadNextPage()
+            }
+
+            is SearchIntent.Retry -> {
+                retrySearch()
+            }
+
+            is SearchIntent.RefreshSearch -> {
+                refreshSearch()
             }
 
             is SearchIntent.MovieClicked -> {
@@ -57,38 +68,84 @@ class SearchViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(600) // Debounce for better UX
-            searchMovies()
+            searchMovies(page = 1, isRefresh = true)
         }
     }
 
-    private fun searchMovies() {
+    private fun searchMovies(page: Int = 1, isRefresh: Boolean = false) {
         val query = _state.value.query
         if (query.isEmpty()) {
-            _state.value = _state.value.copy(movies = emptyList())
+            _state.value = _state.value.copy(
+                movies = emptyList(),
+                currentPage = 1,
+                endReached = false
+            )
             return
         }
 
-        searchMoviesUseCase(query).onEach { result ->
+        // Set loading states
+        if (page == 1 || isRefresh) {
+            _state.value = _state.value.copy(isLoading = true, error = "")
+        } else {
+            _state.value = _state.value.copy(isLoadingMore = true)
+        }
+
+        searchMoviesUseCase(query, page).onEach { result ->
             when (result) {
                 is Resource.Success -> {
+                    val newMovies = result.data ?: emptyList()
+                    val allMovies = if (page == 1 || isRefresh) {
+                        newMovies
+                    } else {
+                        _state.value.movies + newMovies
+                    }
+
                     _state.value = _state.value.copy(
-                        movies = result.data ?: emptyList(),
-                        isLoading = false
+                        movies = allMovies,
+                        isLoading = false,
+                        isLoadingMore = false,
+                        error = "",
+                        currentPage = page,
+                        endReached = newMovies.isEmpty()
                     )
                 }
 
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
                         error = result.message ?: "An unexpected error occurred",
-                        isLoading = false
+                        isLoading = false,
+                        isLoadingMore = false
                     )
                 }
 
                 is Resource.Loading -> {
-                    _state.value = _state.value.copy(isLoading = true)
+                    if (page == 1 || isRefresh) {
+                        _state.value = _state.value.copy(isLoading = true)
+                    } else {
+                        _state.value = _state.value.copy(isLoadingMore = true)
+                    }
                 }
             }
         }.launchIn(viewModelScope)
     }
 
+    private fun loadNextPage() {
+        if (!_state.value.endReached && !_state.value.isLoadingMore && !_state.value.isLoading) {
+            searchMovies(_state.value.currentPage + 1)
+        }
+    }
+
+    private fun retrySearch() {
+        val currentPage = if (_state.value.movies.isEmpty()) 1 else _state.value.currentPage
+        searchMovies(currentPage)
+    }
+
+    private fun refreshSearch() {
+        _state.value = _state.value.copy(
+            movies = emptyList(),
+            currentPage = 1,
+            endReached = false
+        )
+        searchMovies(page = 1, isRefresh = true)
+    }
 }
