@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.example.moviediscovery.R
 import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
 
+// For big loadings, like all page
 @Composable
 fun LoadingView(modifier: Modifier = Modifier) {
     Box(
