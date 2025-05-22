@@ -127,7 +127,7 @@ app/src/main/java/com/example/moviediscovery/
   <tr>
     <td><img src="https://github.com/user-attachments/assets/c2562cc7-ef1e-4c1f-89ac-bd8c6fbc5de4" height="500"></td>
     <td><img src="https://github.com/user-attachments/assets/0fca1c39-3874-4f2f-bbca-747b732851f3" height="500"></td>
-    <td><img src="https://github.com/user-attachments/assets/7549bf03-5e86-4b90-927e-b39f8f5d15a5" height="500"></td>
+    <td><img src="https://github.com/user-attachments/assets/24619065-988f-4611-9673-24c442ecec97" height="500"></td>
   </tr>
 </table>
 
@@ -159,9 +159,9 @@ app/src/main/java/com/example/moviediscovery/
 </table>
 
 ### Demo Video
-<p align="center">
-  <img src="" alt="Movie Discovery App Demo" height="500px"/>
-</p>
+You can find the demo video inside the `screenshots` folder:
+
+[📽️ movieDiscovery.mp4](https://youtube.com/shorts/XLMa92lg6FU)
 
 ## 🏗️ Architecture Details
 
