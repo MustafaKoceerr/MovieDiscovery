@@ -6,7 +6,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviediscovery.domain.model.Resource
+import com.example.moviediscovery.domain.usecase.GetLanguageUseCase
 import com.example.moviediscovery.domain.usecase.GetMovieDetailsUseCase
+import com.example.moviediscovery.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -15,8 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
+    savedStateHandle: SavedStateHandle,
+    getLanguageUseCase: GetLanguageUseCase
+) : BaseViewModel(getLanguageUseCase) {
 
     private val _state = mutableStateOf(DetailState(isLoading = true))
     val state: State<DetailState> = _state
@@ -28,10 +31,11 @@ class DetailViewModel @Inject constructor(
         // Only load details automatically if movieId is available from navigation
         movieId?.let {
             loadMovieDetails()
+            observeLanguageChanges { loadMovieDetails() }
         }
     }
 
-    fun setMovieId(id:Int){
+    fun setMovieId(id: Int) {
         // Only reload if the ID has changed
         if (movieId != id) {
             movieId = id
