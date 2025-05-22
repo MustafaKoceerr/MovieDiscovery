@@ -3,15 +3,13 @@ package com.example.moviediscovery.presentation.search
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.example.moviediscovery.domain.model.Resource
 import com.example.moviediscovery.domain.usecase.GetLanguageUseCase
 import com.example.moviediscovery.domain.usecase.SearchMoviesUseCase
 import com.example.moviediscovery.presentation.base.BaseViewModel
+import com.example.moviediscovery.presentation.common.pagination.PaginationController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +23,11 @@ class SearchViewModel @Inject constructor(
     val state: State<SearchState> = _state
 
     private var searchJob: Job? = null
+
+    // Pagination controller for search results
+    private val paginationController = PaginationController(viewModelScope) { paginationState ->
+        _state.value = _state.value.copy(paginationState = paginationState)
+    }
 
     init {
         observeLanguageChanges {
@@ -43,15 +46,19 @@ class SearchViewModel @Inject constructor(
             }
 
             is SearchIntent.SearchMovies -> {
-                searchMovies()
+                performSearch()
             }
 
             is SearchIntent.LoadNextPage -> {
-                loadNextPage()
+                paginationController.loadNextPage { page ->
+                    searchMoviesUseCase(_state.value.query, page)
+                }
             }
 
             is SearchIntent.Retry -> {
-                retrySearch()
+                paginationController.retry { page ->
+                    searchMoviesUseCase(_state.value.query, page)
+                }
             }
 
             is SearchIntent.RefreshSearch -> {
@@ -59,7 +66,7 @@ class SearchViewModel @Inject constructor(
             }
 
             is SearchIntent.MovieClicked -> {
-                // will be handled by navigation
+                // Handled by navigation
             }
         }
     }
@@ -68,84 +75,39 @@ class SearchViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(600) // Debounce for better UX
-            searchMovies(page = 1, isRefresh = true)
+            performSearch()
         }
     }
 
-    private fun searchMovies(page: Int = 1, isRefresh: Boolean = false) {
-        val query = _state.value.query
+    private fun performSearch() {
+        val query = _state.value.query.trim()
         if (query.isEmpty()) {
-            _state.value = _state.value.copy(
-                movies = emptyList(),
-                currentPage = 1,
-                endReached = false
-            )
+            clearSearch()
             return
         }
 
-        // Set loading states
-        if (page == 1 || isRefresh) {
-            _state.value = _state.value.copy(isLoading = true, error = "")
-        } else {
-            _state.value = _state.value.copy(isLoadingMore = true)
-        }
-
-        searchMoviesUseCase(query, page).onEach { result ->
-            when (result) {
-                is Resource.Success -> {
-                    val newMovies = result.data ?: emptyList()
-                    val allMovies = if (page == 1 || isRefresh) {
-                        newMovies
-                    } else {
-                        _state.value.movies + newMovies
-                    }
-
-                    _state.value = _state.value.copy(
-                        movies = allMovies,
-                        isLoading = false,
-                        isLoadingMore = false,
-                        error = "",
-                        currentPage = page,
-                        endReached = newMovies.isEmpty()
-                    )
-                }
-
-                is Resource.Error -> {
-                    _state.value = _state.value.copy(
-                        error = result.message ?: "An unexpected error occurred",
-                        isLoading = false,
-                        isLoadingMore = false
-                    )
-                }
-
-                is Resource.Loading -> {
-                    if (page == 1 || isRefresh) {
-                        _state.value = _state.value.copy(isLoading = true)
-                    } else {
-                        _state.value = _state.value.copy(isLoadingMore = true)
-                    }
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    private fun loadNextPage() {
-        if (!_state.value.endReached && !_state.value.isLoadingMore && !_state.value.isLoading) {
-            searchMovies(_state.value.currentPage + 1)
-        }
-    }
-
-    private fun retrySearch() {
-        val currentPage = if (_state.value.movies.isEmpty()) 1 else _state.value.currentPage
-        searchMovies(currentPage)
+        _state.value = _state.value.copy(isInitialSearch = true)
+        paginationController.refresh { page -> searchMoviesUseCase(query, page) }
+        _state.value = _state.value.copy(isInitialSearch = false)
     }
 
     private fun refreshSearch() {
-        _state.value = _state.value.copy(
-            movies = emptyList(),
-            currentPage = 1,
-            endReached = false
-        )
-        searchMovies(page = 1, isRefresh = true)
+        val query = _state.value.query.trim()
+        if (query.isEmpty()) {
+            clearSearch()
+            return
+        }
+
+        paginationController.refresh { page -> searchMoviesUseCase(query, page) }
+    }
+
+    private fun clearSearch() {
+        paginationController.clear()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        paginationController.clear()
+        searchJob?.cancel()
     }
 }
