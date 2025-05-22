@@ -159,7 +159,7 @@ app/src/main/java/com/example/moviediscovery/
 </table>
 
 ### Demo Video
-You can find the demo video inside the `screenshots` folder:
+You can watch the demo video on YouTube:
 
 [📽️ movieDiscovery.mp4](https://youtube.com/shorts/XLMa92lg6FU)
 
