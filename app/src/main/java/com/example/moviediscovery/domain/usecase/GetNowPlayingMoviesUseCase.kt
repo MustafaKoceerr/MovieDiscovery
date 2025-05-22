@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class GetNowPlayingMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
-){
-    operator fun invoke(): Flow<Resource<List<Movie>>>{
-        return movieRepository.getNowPlayingMovies()
+) {
+    operator fun invoke(page: Int = 1): Flow<Resource<List<Movie>>> {
+        return movieRepository.getNowPlayingMovies(page)
     }
 }

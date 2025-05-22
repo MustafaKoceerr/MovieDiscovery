@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetPopularMoviesUseCase @Inject constructor(
     private val movieRepository: MovieRepository
 ) {
-    operator fun invoke(): Flow<Resource<List<Movie>>> {
-        return movieRepository.getPopularMovies()
+    operator fun invoke(page:Int = 1): Flow<Resource<List<Movie>>> {
+        return movieRepository.getPopularMovies(page)
     }
 }
