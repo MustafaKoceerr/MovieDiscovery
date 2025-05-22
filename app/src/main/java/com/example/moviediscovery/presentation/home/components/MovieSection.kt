@@ -1,6 +1,5 @@
 package com.example.moviediscovery.presentation.home.components
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,12 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.moviediscovery.domain.model.Movie
 import com.example.moviediscovery.presentation.common.MovieItem
-import com.example.moviediscovery.presentation.home.sampleMovies
-import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
 
 private val TAG: String = "MOVIE"
 
@@ -52,16 +48,4 @@ fun MovieSection(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-fun MovieSectionPreview() {
-    MovieDiscoveryTheme {
-        MovieSection(
-            "Favorite Movies",
-            sampleMovies + sampleMovies,
-            { movieId ->
-                Log.d(TAG, "film id: $movieId")
-            }
-        )
-    }
-}
+

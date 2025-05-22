@@ -22,36 +22,31 @@ fun HomeScreen(
     val state by viewModel.state
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Show global loading only if all categories are empty and loading
-        if (state.isLoading &&
-            state.nowPlayingMovies.isEmpty() &&
-            state.popularMovies.isEmpty() &&
-            state.topRatedMovies.isEmpty() &&
-            state.upcomingMovies.isEmpty()
-        ) {
-            LoadingView()
-        }
-        // Show global error only if all categories are empty and have errors
-        else if (state.error.isNotEmpty() &&
-            state.nowPlayingMovies.isEmpty() &&
-            state.popularMovies.isEmpty() &&
-            state.topRatedMovies.isEmpty() &&
-            state.upcomingMovies.isEmpty()
-        ) {
-            ErrorView(message = state.error) {
-                viewModel.processIntent(HomeIntent.RefreshAll)
+        when {
+            // Show global loading only if all categories are empty and initially loading
+            state.isInitialLoading && state.allEmpty -> {
+                LoadingView() // Your cinematic loading screen
             }
-        }
-        else {
-            HomeContent(
-                state = state,
-                onMovieClick = { movieId ->
-                    onMovieClick(movieId)
-                    viewModel.processIntent(HomeIntent.MovieClicked(movieId))
-                },
-                onSearchClick = onSearchClick,
-                onIntent = viewModel::processIntent
-            )
+
+            // Show global error only if all categories are empty and have errors
+            state.hasGlobalError -> {
+                ErrorView(message = state.generalError) {
+                    viewModel.processIntent(HomeIntent.RefreshAll)
+                }
+            }
+
+            // Show content with individual section states
+            else -> {
+                HomeContent(
+                    state = state,
+                    onMovieClick = { movieId ->
+                        onMovieClick(movieId)
+                        viewModel.processIntent(HomeIntent.MovieClicked(movieId))
+                    },
+                    onSearchClick = onSearchClick,
+                    onIntent = viewModel::processIntent
+                )
+            }
         }
     }
 }
