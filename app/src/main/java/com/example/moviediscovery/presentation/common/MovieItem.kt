@@ -1,6 +1,5 @@
 package com.example.moviediscovery.presentation.common
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -13,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,9 +34,6 @@ import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
 import com.example.moviediscovery.util.Constants.IMAGE_BASE_URL
 import com.example.moviediscovery.util.Constants.POSTER_SIZE
 import com.example.moviediscovery.util.formatRatingToOneDecimalUp
-import java.util.Locale
-
-private val TAG: String = "MovieItem"
 
 @Composable
 fun MovieItem(
@@ -52,14 +50,15 @@ fun MovieItem(
                 .height(225.dp)
                 .clip(RoundedCornerShape(8.dp))
         ) {
+            // Image with proper null handling
             AsyncImage(
-                model = "$IMAGE_BASE_URL$POSTER_SIZE${movie.posterPath}",
+                model = movie.posterPath?.let { "$IMAGE_BASE_URL$POSTER_SIZE$it" },
                 contentDescription = movie.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
 
-            // Add a gradient overlay at the bottom to make the title more readable
+            // Gradient overlay for better text visibility
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,17 +67,18 @@ fun MovieItem(
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                androidx.compose.ui.graphics.Color.Transparent,
-                                androidx.compose.ui.graphics.Color.Black.copy(alpha = 0.7f)
+                                Color.Transparent,
+                                Color.Black.copy(alpha = 0.7f)
                             )
                         )
                     )
             )
 
+            // Title - no need for null check as mapper provides default
             Text(
                 text = movie.title,
                 style = MaterialTheme.typography.bodyMedium,
-                color = androidx.compose.ui.graphics.Color.White,
+                color = Color.White,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
@@ -87,21 +87,28 @@ fun MovieItem(
             )
         }
 
-        // Display rating
+        // Rating - simplified logic since mapper ensures voteAverage >= 0
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(top = 4.dp)
         ) {
             Icon(
-                imageVector = androidx.compose.material.icons.Icons.Default.Star,
+                imageVector = Icons.Default.Star,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.size(16.dp)
             )
-            val rating = movie.voteAverage.toFloat()
-            if (rating != 0f) {
+
+            // Show rating if it's greater than 0
+            if (movie.voteAverage > 0) {
                 Text(
-                    text = rating.formatRatingToOneDecimalUp(),
+                    text = movie.voteAverage.toFloat().formatRatingToOneDecimalUp(),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            } else {
+                Text(
+                    text = "N/A",
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 4.dp)
                 )
@@ -115,8 +122,8 @@ fun MovieItem(
 fun MovieItemPreview() {
     MovieDiscoveryTheme {
         MovieItem(
-            sampleMovies[0], onMovieClick = { movieId ->
-                Log.d(TAG, "Movie id : $movieId")
-            })
+            sampleMovies[0],
+            onMovieClick = { }
+        )
     }
 }
