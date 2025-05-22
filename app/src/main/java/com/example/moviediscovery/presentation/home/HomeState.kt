@@ -1,39 +1,29 @@
 package com.example.moviediscovery.presentation.home
 
 import com.example.moviediscovery.domain.model.Movie
+import com.example.moviediscovery.presentation.common.pagination.MoviePaginationState
 import java.lang.Error
 
 data class HomeState(
-    // Movie lists
-    val nowPlayingMovies: List<Movie> = emptyList(),
-    val popularMovies: List<Movie> = emptyList(),
-    val topRatedMovies: List<Movie> = emptyList(),
-    val upcomingMovies: List<Movie> = emptyList(),
+    val nowPlayingState: MoviePaginationState = MoviePaginationState(),
+    val popularState: MoviePaginationState = MoviePaginationState(),
+    val topRatedState: MoviePaginationState = MoviePaginationState(),
+    val upcomingState: MoviePaginationState = MoviePaginationState(),
+    val isInitialLoading: Boolean = false,
+    val generalError: String = ""
+) {
+    val isAnyLoading: Boolean
+        get() = nowPlayingState.isLoading || popularState.isLoading ||
+                topRatedState.isLoading || upcomingState.isLoading || isInitialLoading
 
-    // Loading states for each category
-    val isNowPlayingLoading: Boolean = false,
-    val isPopularLoading: Boolean = false,
-    val isTopRatedLoading: Boolean = false,
-    val isUpcomingLoading: Boolean = false,
+    val hasAnyMovies: Boolean
+        get() = nowPlayingState.items.isNotEmpty() || popularState.items.isNotEmpty() ||
+                topRatedState.items.isNotEmpty() || upcomingState.items.isNotEmpty()
 
-    // Error states for each category
-    val nowPlayingError: String = "",
-    val popularError: String = "",
-    val topRatedError: String = "",
-    val upcomingError: String = "",
+    val allEmpty: Boolean
+        get() = nowPlayingState.items.isEmpty() && popularState.items.isEmpty() &&
+                topRatedState.items.isEmpty() && upcomingState.items.isEmpty()
 
-    // Pagination states for each category
-    val nowPlayingPage: Int = 1,
-    val popularPage: Int = 1,
-    val topRatedPage: Int = 1,
-    val upcomingPage: Int = 1,
-
-    val nowPlayingEndReached: Boolean = false,
-    val popularEndReached: Boolean = false,
-    val topRatedEndReached: Boolean = false,
-    val upcomingEndReached: Boolean = false,
-
-    // General loading state (for initial load)
-    val isLoading: Boolean = false,
-    val error: String = ""
-)
+    val hasGlobalError:Boolean
+        get()= generalError.isNotEmpty() && allEmpty && !isInitialLoading
+}
