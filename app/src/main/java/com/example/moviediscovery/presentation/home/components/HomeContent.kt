@@ -15,13 +15,11 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.moviediscovery.R
+import com.example.moviediscovery.presentation.common.pagination.PaginatedMovieSection
 import com.example.moviediscovery.presentation.home.HomeIntent
 import com.example.moviediscovery.presentation.home.HomeState
-import com.example.moviediscovery.presentation.home.sampleMovies
-import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
 
 @ExperimentalMaterial3Api
 @Composable
@@ -53,96 +51,65 @@ fun HomeContent(
                 .padding(paddingValues),
             contentPadding = PaddingValues(bottom = 16.dp)
         ) {
-            if (state.nowPlayingMovies.isNotEmpty() || state.isNowPlayingLoading || state.nowPlayingError.isNotEmpty()) {
+            // Now Playing Section
+            if (state.nowPlayingState.items.isNotEmpty() ||
+                state.nowPlayingState.isLoading ||
+                state.nowPlayingState.error.isNotEmpty()) {
                 item {
                     PaginatedMovieSection(
                         title = stringResource(R.string.category_now_playing),
-                        movies = state.nowPlayingMovies,
+                        paginationState = state.nowPlayingState,
                         onMovieClick = onMovieClick,
                         onLoadMore = { onIntent(HomeIntent.LoadNextNowPlayingPage) },
-                        onRetry = { onIntent(HomeIntent.RetryNowPlaying) },
-                        isLoading = state.isNowPlayingLoading,
-                        error = state.nowPlayingError,
-                        endReached = state.nowPlayingEndReached
+                        onRetry = { onIntent(HomeIntent.RetryNowPlaying) }
                     )
                 }
             }
 
-            if (state.popularMovies.isNotEmpty() || state.isPopularLoading || state.popularError.isNotEmpty()) {
+            // Popular Section
+            if (state.popularState.items.isNotEmpty() ||
+                state.popularState.isLoading ||
+                state.popularState.error.isNotEmpty()) {
                 item {
                     PaginatedMovieSection(
                         title = stringResource(R.string.category_popular),
-                        movies = state.popularMovies,
+                        paginationState = state.popularState,
                         onMovieClick = onMovieClick,
                         onLoadMore = { onIntent(HomeIntent.LoadNextPopularPage) },
-                        onRetry = { onIntent(HomeIntent.RetryPopular) },
-                        isLoading = state.isPopularLoading,
-                        error = state.popularError,
-                        endReached = state.popularEndReached
+                        onRetry = { onIntent(HomeIntent.RetryPopular) }
                     )
                 }
             }
 
-            if (state.topRatedMovies.isNotEmpty() || state.isTopRatedLoading || state.topRatedError.isNotEmpty()) {
+            // Top Rated Section
+            if (state.topRatedState.items.isNotEmpty() ||
+                state.topRatedState.isLoading ||
+                state.topRatedState.error.isNotEmpty()) {
                 item {
                     PaginatedMovieSection(
                         title = stringResource(R.string.category_top_rated),
-                        movies = state.topRatedMovies,
+                        paginationState = state.topRatedState,
                         onMovieClick = onMovieClick,
                         onLoadMore = { onIntent(HomeIntent.LoadNextTopRatedPage) },
-                        onRetry = { onIntent(HomeIntent.RetryTopRated) },
-                        isLoading = state.isTopRatedLoading,
-                        error = state.topRatedError,
-                        endReached = state.topRatedEndReached
+                        onRetry = { onIntent(HomeIntent.RetryTopRated) }
                     )
                 }
             }
 
-            if (state.upcomingMovies.isNotEmpty() || state.isUpcomingLoading || state.upcomingError.isNotEmpty()) {
+            // Upcoming Section
+            if (state.upcomingState.items.isNotEmpty() ||
+                state.upcomingState.isLoading ||
+                state.upcomingState.error.isNotEmpty()) {
                 item {
                     PaginatedMovieSection(
                         title = stringResource(R.string.category_upcoming),
-                        movies = state.upcomingMovies,
+                        paginationState = state.upcomingState,
                         onMovieClick = onMovieClick,
                         onLoadMore = { onIntent(HomeIntent.LoadNextUpcomingPage) },
-                        onRetry = { onIntent(HomeIntent.RetryUpcoming) },
-                        isLoading = state.isUpcomingLoading,
-                        error = state.upcomingError,
-                        endReached = state.upcomingEndReached
+                        onRetry = { onIntent(HomeIntent.RetryUpcoming) }
                     )
                 }
             }
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun HomeContentPaginationPreview() {
-    MovieDiscoveryTheme {
-        HomeContent(
-            state = tempPaginationState,
-            onMovieClick = { },
-            onSearchClick = { },
-            onIntent = { }
-        )
-    }
-}
-
-val tempPaginationState = HomeState(
-    nowPlayingMovies = sampleMovies,
-    popularMovies = sampleMovies,
-    topRatedMovies = sampleMovies,
-    upcomingMovies = sampleMovies,
-    isNowPlayingLoading = false,
-    isPopularLoading = true,
-    isTopRatedLoading = false,
-    isUpcomingLoading = false,
-    nowPlayingError = "",
-    popularError = "",
-    topRatedError = "",
-    upcomingError = "",
-    isLoading = false,
-    error = ""
-)

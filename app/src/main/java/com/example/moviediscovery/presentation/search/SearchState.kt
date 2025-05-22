@@ -1,15 +1,28 @@
 package com.example.moviediscovery.presentation.search
 
-import com.example.moviediscovery.domain.model.Movie
+import com.example.moviediscovery.presentation.common.pagination.MoviePaginationState
 
 data class SearchState(
     val query: String = "",
-    val movies: List<Movie> = emptyList(),
-    val isLoading: Boolean = false,
-    val error: String = "",
+    val paginationState: MoviePaginationState = MoviePaginationState(),
+    val isInitialSearch: Boolean = false
+) {
+    // Computed properties for easier access
+    val hasResults: Boolean
+        get() = paginationState.items.isNotEmpty()
 
-    // Pagination specific
-    val currentPage: Int = 1,
-    val endReached: Boolean = false,
-    val isLoadingMore: Boolean = false
-)
+    val isEmptyQuery: Boolean
+        get() = query.trim().isEmpty()
+
+    val shouldShowInitialState: Boolean
+        get() = isEmptyQuery && !hasResults
+
+    val shouldShowEmptyResults: Boolean
+        get() = !isEmptyQuery && !hasResults && !paginationState.isLoading && paginationState.error.isEmpty()
+
+    val shouldShowResults: Boolean
+        get() = hasResults
+
+    val shouldShowGlobalError: Boolean
+        get() = !hasResults && paginationState.error.isNotEmpty() && !paginationState.isLoading
+}

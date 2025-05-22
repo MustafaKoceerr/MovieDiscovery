@@ -36,6 +36,6 @@ fun EmptySearchResults(query: String) {
 @Composable
 fun EmptySearchResults(){
     MovieDiscoveryTheme {
-         EmptySearchResults(query = "Hello all")
+         EmptySearchResults(query = "Grandfather")
     }
 }
