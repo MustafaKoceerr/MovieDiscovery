@@ -31,7 +31,6 @@ class SettingsViewModel @Inject constructor(
             is SettingsIntent.LoadSettings -> {
                 loadSettings()
             }
-
             is SettingsIntent.ChangeLanguage -> {
                 updateLanguage(intent.language)
             }
@@ -43,21 +42,33 @@ class SettingsViewModel @Inject constructor(
         getLanguageUseCase().onEach { language ->
             _state.value = _state.value.copy(
                 selectedLanguage = language,
-                isLoading = false
+                isLoading = false,
+                error = ""
             )
         }.launchIn(viewModelScope)
     }
 
     private fun updateLanguage(language: AppLanguage) {
+        val currentLanguage = _state.value.selectedLanguage
+
         viewModelScope.launch {
             try {
                 setLanguageUseCase(language)
-                // Language will be updated via the flow in loadSettings
+
+                // Only trigger restart if language actually changed
+                if (currentLanguage != language) {
+                    _state.value = _state.value.copy(shouldRestartActivity = true)
+                }
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
-                    error = e.message ?: "Failed to update language"
+                    error = e.message ?: "Failed to update language",
+                    isLoading = false
                 )
             }
         }
+    }
+
+    fun onActivityRestarted() {
+        _state.value = _state.value.copy(shouldRestartActivity = false)
     }
 }

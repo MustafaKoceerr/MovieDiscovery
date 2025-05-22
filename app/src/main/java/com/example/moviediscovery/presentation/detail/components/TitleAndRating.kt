@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.moviediscovery.presentation.detail.sampleMovieDetailsList
 import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
+import com.example.moviediscovery.util.formatRatingToOneDecimalUp
 
 @Composable
 fun TitleAndRating(
@@ -50,12 +51,15 @@ fun TitleAndRating(
                 tint = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.size(24.dp)
             )
-            Text(
-                text = "${(voteAverage / 2).toFloat()}",
-                style = MaterialTheme.typography.bodyLarge,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 4.dp)
-            )
+            val rating = voteAverage.toFloat()
+            if (rating != 0f) {
+                Text(
+                    text = rating.formatRatingToOneDecimalUp(),
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
         }
     }
 }
