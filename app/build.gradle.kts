@@ -97,4 +97,7 @@ dependencies {
 
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    // Use delegate to apply selected language
+    implementation("androidx.appcompat:appcompat:1.6.1")
 }
