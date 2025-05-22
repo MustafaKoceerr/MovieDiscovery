@@ -65,13 +65,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
 
     // Compose
     implementation("androidx.navigation:navigation-compose:2.7.0")
@@ -95,4 +88,49 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
 
+    // ========================================
+    // TESTING DEPENDENCIES
+    // ========================================
+
+    // Unit Testing Framework
+    testImplementation(libs.junit) // Uses catalog version instead of duplicate "junit:junit:4.13.2"
+
+    // Mockito for mocking
+    testImplementation("org.mockito:mockito-core:5.1.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+
+    // MockK for Kotlin-specific mocking (needed for BuildConfig)
+    testImplementation("io.mockk:mockk:1.13.8")
+
+    // Coroutines testing
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
+    // Flow testing with Turbine
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+
+    // Better assertions with Truth
+    testImplementation("com.google.truth:truth:1.1.4")
+
+    // LiveData testing
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+
+    // Hilt testing
+    testImplementation("com.google.dagger:hilt-android-testing:2.48")
+    kspTest("com.google.dagger:hilt-android-compiler:2.48")
+
+    // Mock web server for API testing
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.11.0")
+
+    // ========================================
+    // INSTRUMENTED TEST DEPENDENCIES
+    // ========================================
+
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    // Debug
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
