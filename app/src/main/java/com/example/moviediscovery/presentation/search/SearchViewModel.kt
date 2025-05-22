@@ -2,10 +2,11 @@ package com.example.moviediscovery.presentation.search
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviediscovery.domain.model.Resource
+import com.example.moviediscovery.domain.usecase.GetLanguageUseCase
 import com.example.moviediscovery.domain.usecase.SearchMoviesUseCase
+import com.example.moviediscovery.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,13 +17,23 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val searchMoviesUseCase: SearchMoviesUseCase
-) : ViewModel() {
+    private val searchMoviesUseCase: SearchMoviesUseCase,
+    getLanguageUseCase: GetLanguageUseCase
+) : BaseViewModel(getLanguageUseCase) {
 
     private val _state = mutableStateOf(SearchState())
     val state: State<SearchState> = _state
 
     private var searchJob: Job? = null
+
+    init {
+        observeLanguageChanges {
+            // Re-search with current query when language changes
+            if (_state.value.query.isNotEmpty()) {
+                searchMovies()
+            }
+        }
+    }
 
     fun processIntent(intent: SearchIntent) {
         when (intent) {
