@@ -43,4 +43,12 @@
     <string name="settings_language_english">İngilizce</string>
     <string name="settings_language_turkish">Türkçe</string>
     <string name="settings_language_system">Sistem Varsayılanı</string>
+
+    <string name="pagination_no_more_items">Daha fazla film yok</string>
+    <string name="pagination_error">Hata</string>
+    <string name="pagination_retry">Yeniden dene</string>
+
+    <string name="search_error_loading_more">Daha fazla film yüklenirken hata oluştu</string>
+    <string name="search_loading_more">Daha fazla film yükleniyor…</string>
+
 </resources>

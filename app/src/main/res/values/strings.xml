@@ -44,4 +44,11 @@
     <string name="settings_language_turkish">Turkish</string>
     <string name="settings_language_system">System Default</string>
 
+    <string name="pagination_no_more_items">No more movies</string>
+    <string name="pagination_error">Error</string>
+    <string name="pagination_retry">Retry</string>
+
+    <string name="search_error_loading_more">Error loading more movies</string>
+    <string name="search_loading_more">Loading more movies…</string>
+
 </resources>
