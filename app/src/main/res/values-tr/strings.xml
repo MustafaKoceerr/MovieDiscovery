@@ -5,6 +5,7 @@
     <string name="error_retry">Tekrar Dene</string>
     <string name="error_network">Sunucuya ulaşılamadı. İnternet bağlantınızı kontrol edin.</string>
     <string name="error_unknown">Beklenmeyen bir hata oluştu</string>
+    <string name="error_update_language">Dil güncellenemedi</string>
     <string name="loading">Yükleniyor…</string>
 
     <!-- Home Screen -->
@@ -33,4 +34,13 @@
 
     <!-- Loading Screen -->
     <string name="loading_discovering_movies">Filmler keşfediliyor…</string>
+
+    <!-- res/values-tr/strings.xml (add these) -->
+    <string name="bottom_nav_home">Ana Sayfa</string>
+    <string name="bottom_nav_settings">Ayarlar</string>
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_language_english">İngilizce</string>
+    <string name="settings_language_turkish">Türkçe</string>
+    <string name="settings_language_system">Sistem Varsayılanı</string>
 </resources>

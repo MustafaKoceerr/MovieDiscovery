@@ -1,7 +1,5 @@
 package com.example.moviediscovery.data.di
 
-import com.example.moviediscovery.data.api.MovieApi
-import com.example.moviediscovery.data.repository.MovieRepositoryImpl
 import com.example.moviediscovery.domain.repository.MovieRepository
 import com.example.moviediscovery.domain.usecase.GetMovieDetailsUseCase
 import com.example.moviediscovery.domain.usecase.GetNowPlayingMoviesUseCase
@@ -17,7 +15,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object UseCaseModule {
+object ApiUseCaseModule {
 
     @Provides
     @Singleton
