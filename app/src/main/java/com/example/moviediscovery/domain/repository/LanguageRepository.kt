@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface LanguageRepository {
     fun getLanguage(): Flow<AppLanguage>
     suspend fun setLanguage(language: AppLanguage)
+    fun getCurrentLanguage(): AppLanguage // Add synchronous access
 }

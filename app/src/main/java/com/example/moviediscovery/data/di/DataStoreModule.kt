@@ -1,6 +1,7 @@
 package com.example.moviediscovery.data.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -14,7 +15,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
@@ -23,11 +23,7 @@ object DataStoreModule {
 
     @Provides
     @Singleton
-    fun providePreferencesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create {
-            context.preferencesDataStoreFile(PREFERENCES_NAME)
-        }
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("movie_discovery_prefs", Context.MODE_PRIVATE)
     }
 }
-
-// Extension property for Context

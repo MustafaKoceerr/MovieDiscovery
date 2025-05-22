@@ -9,7 +9,7 @@ class GetLanguageUseCase @Inject constructor(
     private val languageRepository: LanguageRepository
 ) {
     operator fun invoke(): Flow<AppLanguage> {
-        return languageRepository.getLanguage()
+        return languageRepository.getLanguage() // Still reactive for UI
     }
 
 }
