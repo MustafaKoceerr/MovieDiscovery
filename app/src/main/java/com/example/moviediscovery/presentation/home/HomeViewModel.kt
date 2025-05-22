@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moviediscovery.domain.model.Resource
+import com.example.moviediscovery.domain.usecase.GetLanguageUseCase
 import com.example.moviediscovery.domain.usecase.GetNowPlayingMoviesUseCase
 import com.example.moviediscovery.domain.usecase.GetPopularMoviesUseCase
 import com.example.moviediscovery.domain.usecase.GetTopRatedMoviesUseCase
 import com.example.moviediscovery.domain.usecase.GetUpcomingMoviesUseCase
+import com.example.moviediscovery.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -19,14 +21,16 @@ class HomeViewModel @Inject constructor(
     private val getNowPlayingMoviesUseCase: GetNowPlayingMoviesUseCase,
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val getTopRatedMoviesUseCase: GetTopRatedMoviesUseCase,
-    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase
-) : ViewModel() {
+    private val getUpcomingMoviesUseCase: GetUpcomingMoviesUseCase,
+    getLanguageUseCase: GetLanguageUseCase
+) : BaseViewModel(getLanguageUseCase) {
 
     private val _state = mutableStateOf(HomeState())
     val state: State<HomeState> = _state
 
     init {
         loadMovies()
+        observeLanguageChanges { loadMovies() }
     }
 
     fun processIntent(intent: HomeIntent) {
