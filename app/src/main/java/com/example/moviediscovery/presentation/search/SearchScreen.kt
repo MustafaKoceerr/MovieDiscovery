@@ -55,28 +55,28 @@ fun SearchScreen(
         ) {
             when {
                 // Show loading only for initial search (not for pagination)
-                state.isLoading && state.movies.isEmpty() -> {
-                    LoadingView()
+                (state.isInitialSearch || state.paginationState.isLoading) && !state.hasResults -> {
+                    LoadingView() // Your cinematic loading for initial search
                 }
 
                 // Show error only if no movies are loaded and there's an error
-                state.error.isNotEmpty() && state.movies.isEmpty() -> {
+                state.shouldShowGlobalError -> {
                     ErrorView(
-                        message = state.error
+                        message = state.paginationState.error
                     ) {
                         viewModel.processIntent(SearchIntent.Retry)
                     }
                 }
 
                 // Show empty results when query exists but no movies found
-                state.movies.isEmpty() && state.query.isNotEmpty() && !state.isLoading -> {
+                state.shouldShowEmptyResults -> {
                     EmptySearchResults(query = state.query)
                 }
 
                 // Show search results with pagination
-                state.movies.isNotEmpty() -> {
+                state.shouldShowResults -> {
                     SearchResults(
-                        movies = state.movies,
+                        paginationState = state.paginationState,
                         onMovieClick = { movieId ->
                             onMovieClick(movieId)
                             viewModel.processIntent(SearchIntent.MovieClicked(movieId))
@@ -86,15 +86,12 @@ fun SearchScreen(
                         },
                         onRetry = {
                             viewModel.processIntent(SearchIntent.Retry)
-                        },
-                        isLoadingMore = state.isLoadingMore,
-                        error = if (state.movies.isNotEmpty()) state.error else "",
-                        endReached = state.endReached
+                        }
                     )
                 }
 
-                else -> {
-                    // Initial state or empty query
+                // Initial state or empty query
+                state.shouldShowInitialState -> {
                     InitialSearchState()
                 }
             }
