@@ -1,6 +1,6 @@
 # Movie Discovery App
 
-A modern Android application that allows users to discover movies using The Movie Database (TMDB) API. Built with Kotlin, Jetpack Compose, and following MVVM architecture with Clean Architecture principles.
+A modern Android application that allows users to discover movies using The Movie Database (TMDB) API. Built with Kotlin, Jetpack Compose, and following MVI architecture with Clean Architecture principles.
 
 ## 🔑 API Key Setup
 
