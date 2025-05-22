@@ -7,7 +7,7 @@ import com.example.moviediscovery.domain.model.AppLanguage
 import java.util.Locale
 
 object LocaleHelper {
-    fun setLocale(context: Context, language: AppLanguage): Context {
+    private fun setLocale(context: Context, language: AppLanguage): Context {
         val locale = when (language) {
             AppLanguage.ENGLISH -> Locale("en")
             AppLanguage.TURKISH -> Locale("tr")

@@ -1,4 +1,4 @@
-package com.example.moviediscovery.data.di
+package com.example.moviediscovery.domain.di
 
 import com.example.moviediscovery.domain.repository.MovieRepository
 import com.example.moviediscovery.domain.usecase.GetMovieDetailsUseCase

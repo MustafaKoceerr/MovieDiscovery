@@ -20,11 +20,12 @@ class MovieRepositoryImpl @Inject constructor(
     private val baseApiRepository: BaseApiRepository
 ) : MovieRepository {
 
-    override fun getNowPlayingMovies(): Flow<Resource<List<Movie>>> {
+    override fun getNowPlayingMovies(page: Int): Flow<Resource<List<Movie>>> {
         return safeApiCall<ApiResponse<MovieDto>>(
             apiCall = {
                 movieApi.getNowPlayingMovies(
                     apiKey = BuildConfig.API_KEY,
+                    page = page,
                     language = baseApiRepository.getLanguageCode()
                 )
             }
@@ -41,11 +42,12 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getPopularMovies(): Flow<Resource<List<Movie>>> {
+    override fun getPopularMovies(page: Int): Flow<Resource<List<Movie>>> {
         return safeApiCall<ApiResponse<MovieDto>>(
             apiCall = {
                 movieApi.getPopularMovies(
                     apiKey = BuildConfig.API_KEY,
+                    page = page,
                     language = baseApiRepository.getLanguageCode()
                 )
             }
@@ -62,11 +64,12 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getTopRatedMovies(): Flow<Resource<List<Movie>>> {
+    override fun getTopRatedMovies(page: Int): Flow<Resource<List<Movie>>> {
         return safeApiCall<ApiResponse<MovieDto>>(
             apiCall = {
                 movieApi.getTopRatedMovies(
                     apiKey = BuildConfig.API_KEY,
+                    page = page,
                     language = baseApiRepository.getLanguageCode()
                 )
             }
@@ -83,11 +86,12 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getUpcomingMovies(): Flow<Resource<List<Movie>>> {
+    override fun getUpcomingMovies(page: Int): Flow<Resource<List<Movie>>> {
         return safeApiCall<ApiResponse<MovieDto>>(
             apiCall = {
                 movieApi.getUpcomingMovies(
                     apiKey = BuildConfig.API_KEY,
+                    page = page,
                     language = baseApiRepository.getLanguageCode()
                 )
             }
@@ -122,12 +126,13 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun searchMovies(query: String): Flow<Resource<List<Movie>>> {
+    override fun searchMovies(query: String, page: Int): Flow<Resource<List<Movie>>> {
         return safeApiCall<ApiResponse<MovieDto>>(
             apiCall = {
                 movieApi.searchMovies(
                     apiKey = BuildConfig.API_KEY,
                     query = query,
+                    page = page,
                     language = baseApiRepository.getLanguageCode()
                 )
             }

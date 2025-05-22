@@ -12,7 +12,6 @@ import com.example.moviediscovery.presentation.common.ErrorView
 import com.example.moviediscovery.presentation.common.LoadingView
 import com.example.moviediscovery.presentation.home.components.HomeContent
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -23,31 +22,41 @@ fun HomeScreen(
     val state by viewModel.state
 
     Box(modifier = Modifier.fillMaxSize()) {
-        if (state.isLoading && state.nowPlayingMovies.isEmpty() &&
-            state.popularMovies.isEmpty() && state.topRatedMovies.isEmpty() &&
+        // Show global loading only if all categories are empty and loading
+        if (state.isLoading &&
+            state.nowPlayingMovies.isEmpty() &&
+            state.popularMovies.isEmpty() &&
+            state.topRatedMovies.isEmpty() &&
             state.upcomingMovies.isEmpty()
         ) {
             LoadingView()
-        } else if (state.error.isNotEmpty() && state.nowPlayingMovies.isEmpty() &&
-            state.popularMovies.isEmpty() && state.topRatedMovies.isEmpty() &&
+        }
+        // Show global error only if all categories are empty and have errors
+        else if (state.error.isNotEmpty() &&
+            state.nowPlayingMovies.isEmpty() &&
+            state.popularMovies.isEmpty() &&
+            state.topRatedMovies.isEmpty() &&
             state.upcomingMovies.isEmpty()
         ) {
             ErrorView(message = state.error) {
-                viewModel.processIntent(HomeIntent.LoadMovies)
+                viewModel.processIntent(HomeIntent.RefreshAll)
             }
-        } else {
+        }
+        else {
             HomeContent(
                 state = state,
                 onMovieClick = { movieId ->
                     onMovieClick(movieId)
                     viewModel.processIntent(HomeIntent.MovieClicked(movieId))
                 },
-                onSearchClick = onSearchClick
+                onSearchClick = onSearchClick,
+                onIntent = viewModel::processIntent
             )
         }
     }
 }
 
+// Keep the sample movies for previews
 val sampleMovies = listOf(
     Movie(
         id = 1,
