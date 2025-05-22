@@ -32,6 +32,8 @@ import com.example.moviediscovery.presentation.home.sampleMovies
 import com.example.moviediscovery.presentation.theme.MovieDiscoveryTheme
 import com.example.moviediscovery.util.Constants.IMAGE_BASE_URL
 import com.example.moviediscovery.util.Constants.POSTER_SIZE
+import com.example.moviediscovery.util.formatRatingToOneDecimalUp
+import java.util.Locale
 
 private val TAG: String = "MovieItem"
 
@@ -96,11 +98,14 @@ fun MovieItem(
                 tint = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.size(16.dp)
             )
-            Text(
-                text = "${movie.voteAverage.toFloat() / 2}",
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 4.dp)
-            )
+            val rating = movie.voteAverage.toFloat()
+            if (rating != 0f) {
+                Text(
+                    text = rating.formatRatingToOneDecimalUp(),
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
+            }
         }
     }
 }
